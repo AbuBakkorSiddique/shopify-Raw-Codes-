@@ -1,6 +1,10 @@
 ----------  shopify a search korte hole amake  "/search"  ei ta use korte hobe ------------------
+Shopify তে /search পেজ ব্যবহার করে ডায়নামিক সার্চ ফিচার করা যায়।
 
 <form action="/search" method="get">
   <input type="text" name="q" placeholder="Search products..." />
   <button type="submit">🔍</button>
 </form>
+
+
+ User কিছু লিখে সার্চ করলে /search?q=product-name URL-এ চলে যাবে, এবং Shopify এর built-in search system কাজ করবে।
