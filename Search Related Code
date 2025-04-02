@@ -1,0 +1,6 @@
+----------  shopify a search korte hole amake  "/search"  ei ta use korte hobe ------------------
+
+<form action="/search" method="get">
+  <input type="text" name="q" placeholder="Search products..." />
+  <button type="submit">🔍</button>
+</form>
