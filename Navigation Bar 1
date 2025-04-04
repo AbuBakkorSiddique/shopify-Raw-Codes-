@@ -1,158 +1,76 @@
-<style>
-    .HeaderSection {
-      background-color: {{ section.settings.Navigation_Background }};
-      color: {{ section.settings.Navigation_Text }};
-      padding: {{ section.settings.Navigation_Padding }}px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-  
-    .Brand_Logo {
-      height: {{ section.settings.Logo_height | append: "px" }};
-      width: {{ section.settings.Logo_Width | append: "px" }};
-    }
-  
-    .nav-menu {
-      display: flex;
-      gap: 15px;
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-  
-    .nav-menu li {
-      margin: 0;
-    }
-  
-    .nav-menu a {
-      color: {{ section.settings.Navigation_Text }};
-      text-decoration: none;
-      font-weight: bold;
-    }
-  
-    .nav-menu a:hover {
-      text-decoration: underline;
-    }
-  
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-  
-    .search-bar input {
-      padding: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-  
-    .search-bar button {
-      padding: 5px;
-      background-color: #333;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-  </style>
-  
-  <div class="h-[10vh] w-full HeaderSection px-4">
-    <!-- Logo Section -->
-    <nav>
-      {% if settings.logo != blank %}
-        <img src="{{ settings.logo | image_url }}" alt="{{ shop.name }} Logo" class="Brand_Logo h-full w-full">
-      {% else %}
-        <h1>{{ shop.name }}</h1>
-      {% endif %}
-    </nav>
-  
-    <!-- Dynamic Navigation Menu -->
-    <nav>
-      <ul class="nav-menu">
-        {% for link in linklists[section.settings.navigation_menu].links %}
-          <li>
-            <a href="{{ link.url }}">{{ link.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </nav>
-  
-    <!-- Right Side (Login, Search, Cart) -->
-    <nav class="nav-right">
-      <!-- Search Bar -->
-      <form action="/search" method="get" class="search-bar">
-        <input type="text" name="q" placeholder="Search products..." />
-        <button type="submit">🔍</button>
+<div class="h-[12vh] w-full flex justify-between items-center pt-5 pb-5 pl-2 pr-2 shadow-md ">
+  <!-- Brand Section -->
+  <nav>
+    {% if settings.Brand_logo != blank %}
+
+      <a href="/" class="text-2xl font-bold text-gray-800">
+        <img 
+          src="{{ settings.Brand_logo | image_url: width: 300, height: 300 }}" 
+          alt="Brand Logo" 
+          width="100"
+          height="100"
+          class="object-contain"
+        >
+      </a>
+      
+    {% else %}
+      {{ shop.name }}
+    {% endif %}
+  </nav>
+  <!-- Nav Items -->
+  <nav>
+    <ul class="nav-menu flex flex-row gap-3">
+      {% for link in linklists[section.settings.navigation_menu].links %}
+        <li class="">
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    
+  </nav>
+
+  <!-- End Section  search , card , user , language -->
+  <nav class="flex flex-row gap-5 justify-center items-center">
+      <!-- Search -->
+     <nav>
+      <form action="/search" method="get">
+        <input type="text" name="q" placeholder="Search products..." class="outline-none border border-black p-2 " />
+        <button type="submit" class=" p-2 h-18 w-35 border border-black bg-white shadow-sm align-center">{%  render 'Search_icon' %}</button>
       </form>
-  
-      <!-- Login -->
-      {% if customer %}
-        <a href="{{ routes.account_url }}">My Account</a> |
-        <a href="{{ routes.account_logout_url }}">Logout</a>
-      {% else %}
-        <a href="{{ routes.account_login_url }}">Login</a> |
-        <a href="{{ routes.account_register_url }}">Register</a>
-      {% endif %}
-  
-      <!-- Cart -->
+     </nav>
+    <!-- Card -->
+    <nav class="flex flex-row relative">
       <a href="{{ routes.cart_url }}">
-        🛒 Cart (<span id="cart-count">{{ cart.item_count }}</span>)
+       {% render 'ShopCart' %}  <span id="cart-count" class="absolute -top-4">{{ cart.item_count }}</span>
       </a>
     </nav>
-  </div>
-  
-  {% schema %}
-  {
-    "name": "Navigation Bar",
-    "settings": [
-      {
-        "type": "color",
-        "id": "Navigation_Background",
-        "label": "Background Color",
-        "default": "#FFFFFF"
-      },
-      {
-        "type": "color",
-        "id": "Navigation_Text",
-        "label": "Text Color",
-        "default": "#000000"
-      },
-      {
-        "type": "range",
-        "id": "Logo_height",
-        "min": 50,
-        "max": 500,
-        "step": 50,
-        "unit": "px",
-        "label": "Logo Height",
-        "default": 100
-      },
-      {
-        "type": "range",
-        "id": "Logo_Width",
-        "min": 50,
-        "max": 500,
-        "step": 50,
-        "unit": "px",
-        "label": "Logo Width",
-        "default": 100
-      },
-      {
-        "type": "range",
-        "id": "Navigation_Padding",
-        "min": 5,
-        "max": 500,
-        "step": 5,
-        "unit": "px",
-        "label": "Navigation Padding",
-        "default": 5
-      },
-      {
-        "type": "link_list",
-        "id": "navigation_menu",
-        "label": "Select Navigation Menu"
-      }
-    ]
-  }
-  {% endschema %}
-  
+    <!-- Customer  -->
+     {% if shop.customer_accounts_enabled %}
+      <nav>
+        {% if customer %}
+          <a href="{{ routes.account_url }}">My Account</a> |
+          <a href="{{ routes.account_logout_url }}">Logout</a>
+        {% else %}
+          <a href="{{ routes.account_login_url }}">Login</a> |
+          <a href="{{ routes.account_register_url }}">Register</a>
+        {% endif %}
+      </nav>
+    {% endif %}
+
+  </nav>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+
+    {
+      "type": "link_list",
+      "id": "navigation_menu",
+      "label": "Select Navigation Menu"
+    }
+  ]
+}
+{% endschema %}
