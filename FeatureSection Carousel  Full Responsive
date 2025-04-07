@@ -1,0 +1,104 @@
+<div class="overflow-hidden bg-white py-10">
+  <div class="logo-marquee whitespace-nowrap relative">
+    <div class="logos-slide inline-block animate-logo-slide">
+      {% if section.settings.logo_1 != blank %}
+        <img src="{{ section.settings.logo_1 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+      {% if section.settings.logo_2 != blank %}
+        <img src="{{ section.settings.logo_2 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+      {% if section.settings.logo_3 != blank %}
+        <img src="{{ section.settings.logo_3 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+      {% if section.settings.logo_4 != blank %}
+        <img src="{{ section.settings.logo_4 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+      {% if section.settings.logo_5 != blank %}
+        <img src="{{ section.settings.logo_5 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+    </div>
+    <div class="logos-slide inline-block animate-logo-slide">
+      {% if section.settings.logo_1 != blank %}
+        <img src="{{ section.settings.logo_1 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+      {% if section.settings.logo_2 != blank %}
+        <img src="{{ section.settings.logo_2 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+      {% if section.settings.logo_3 != blank %}
+        <img src="{{ section.settings.logo_3 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+      {% if section.settings.logo_4 != blank %}
+        <img src="{{ section.settings.logo_4 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+      {% if section.settings.logo_5 != blank %}
+        <img src="{{ section.settings.logo_5 | image_url }}" alt="logo" class="h-[40px] mx-10 inline-block" />
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes logo-slide {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .animate-logo-slide {
+    animation: logo-slide 35s linear infinite;
+  }
+
+  .logo-marquee:hover .animate-logo-slide {
+    animation-play-state: paused;
+  }
+
+  @media (max-width: 768px) {
+    .animate-logo-slide img {
+      margin-left: 20px;
+      margin-right: 20px;
+      height: 40px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Logo Marquee Slider",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo_1",
+      "label": "Logo 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_2",
+      "label": "Logo 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_3",
+      "label": "Logo 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_4",
+      "label": "Logo 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_5",
+      "label": "Logo 5"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo Marquee - Fixed Settings",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
