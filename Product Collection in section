@@ -1,3 +1,5 @@
+------------------- 1 . this is collection section in any file folder ---------------
+
 <div class="min-h-[60vh] w-full px-4 py-8">
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     {% for collection in collections %}
@@ -22,5 +24,74 @@
         <p class="text-sm text-gray-600">{{ collection.description }}</p>
       </div>
     {% endfor %}
+  </div>
+</div>
+
+-------------------------------2 : collection a click korar pore akhon product gulo show korbe 
+er jonno amake template a akta collection.liquid / collection.json file make korte hobe -------------------------------------
+
+
+
+{% layout 'theme' %}
+
+<h1>{{ collection.title }}</h1>
+
+{% if collection.description != blank %}
+  <div class="collection-description">
+    {{ collection.description }}
+  </div>
+{% endif %}
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+  {% for product in collection.products %}
+    <div class="border p-4 rounded">
+      <a href="{{ product.url }}">
+        <img src="{{ product.featured_image | image_url }}" alt="{{ product.title }}" />
+        <h2>{{ product.title }}</h2>
+        <p>{{ product.price | money }}</p>
+      </a>
+    </div>
+  {% endfor %}
+</div>
+
+
+
+
+----------------- 3 :  er product a product a click korlei  product details page a chole asbe 
+
+to product detial page make korar jonno product.liquid or / product.json file make kore nite hobe template a -----------------------------
+
+<div class="container mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    
+    <!-- Product Image -->
+    <div>
+      <img 
+        src="{{ product.featured_image | image_ur }}" 
+        alt="{{ product.title }}" 
+        class="w-full rounded-lg shadow" />
+    </div>
+    
+    <!-- Product Info -->
+    <div class="flex flex-col gap-4">
+      <h1 class="text-3xl font-bold">{{ product.title }}</h1>
+      
+      <p class="text-xl text-gray-700 font-semibold">
+        {{ product.price | money }}
+      </p>
+      
+      <div class="text-gray-600 text-sm leading-relaxed">
+        {{ product.description }}
+      </div>
+      
+      <!-- Add to Cart Form -->
+      <form method="post" action="/cart/add">
+        <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+        <button type="submit" class="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800">
+          Add to Cart
+        </button>
+      </form>
+    </div>
+    
   </div>
 </div>
