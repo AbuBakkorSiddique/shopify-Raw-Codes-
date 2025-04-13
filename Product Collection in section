@@ -61,15 +61,37 @@ er jonno amake template a akta collection.liquid / collection.json file make kor
 
 to product detial page make korar jonno product.liquid or / product.json file make kore nite hobe template a -----------------------------
 
+
+
+
+
+
 <div class="container mx-auto px-4 py-8">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     
-    <!-- Product Image -->
-    <div>
-      <img 
-        src="{{ product.featured_image | image_ur }}" 
-        alt="{{ product.title }}" 
-        class="w-full rounded-lg shadow" />
+    <!-- Product Image Section -->
+    <div class="flex flex-col gap-8 w-full h-full justify-center items-center">
+      
+      <!-- Main Product Image -->
+      <div class="w-full">
+        <img 
+          src="{{ product.featured_image | image_url }}" 
+          alt="{{ product.title }}" 
+          class="w-full rounded-lg shadow object-cover" />
+      </div>
+
+      <!-- Product Image Gallery -->
+      <div class="w-full flex flex-row justify-center items-center gap-2 flex-wrap">
+        {% for image in product.images %}
+          <div class="w-20 h-20 border rounded overflow-hidden">
+            <img 
+              src="{{ image | image_url }}" 
+              alt="{{ product.title }}" 
+              class="w-full h-full object-cover cursor-pointer" />
+          </div>
+        {% endfor %}
+      </div>
+
     </div>
     
     <!-- Product Info -->
@@ -87,7 +109,7 @@ to product detial page make korar jonno product.liquid or / product.json file ma
       <!-- Add to Cart Form -->
       <form method="post" action="/cart/add">
         <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
-        <button type="submit" class="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800">
+        <button type="submit" class="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">
           Add to Cart
         </button>
       </form>
@@ -95,3 +117,4 @@ to product detial page make korar jonno product.liquid or / product.json file ma
     
   </div>
 </div>
+
