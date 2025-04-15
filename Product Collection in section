@@ -66,7 +66,7 @@ to product detial page make korar jonno product.liquid or / product.json file ma
 
 
 
-<div class="container mx-auto px-4 py-8">
+<<div class="container mx-auto px-4 py-8">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     
     <!-- Product Image Section -->
@@ -104,6 +104,24 @@ to product detial page make korar jonno product.liquid or / product.json file ma
       
       <div class="text-gray-600 text-sm leading-relaxed">
         {{ product.description }}
+      </div>
+      <!-- product variant -->
+      <div>
+
+        {% for option in product.options_with_values %}
+<div class="mb-4">
+    <h4 class="font-semibold text-gray-800 mb-2">{{ option.name }}:</h4>
+    <ul class="flex gap-2">
+      {% for value in option.values %}
+        <li class="px-3 py-1 border border-gray-300 rounded-md text-sm">
+          {{ value }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endfor %}
+
+        
       </div>
       
       <!-- Add to Cart Form -->
