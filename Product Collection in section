@@ -215,3 +215,175 @@ to product detial page make korar jonno product.liquid or / product.json file ma
 
 
 
+
+
+
+
+<!--  Variant option gulor value gulo  button syestem a chile ------------------------------------------>
+
+
+
+
+
+
+
+
+
+
+
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    
+    <!-- Product Image Section -->
+    <div class="flex flex-col gap-8 w-full h-full justify-center items-center">
+      <!-- Main Product Image -->
+      <div class="w-full">
+        <img 
+          src="{{ product.featured_image | image_url }}" 
+          alt="{{ product.title }}" 
+          class="w-full rounded-lg shadow object-cover" />
+      </div>
+
+      <!-- Product Image Gallery -->
+      <div class="w-full flex flex-row justify-center items-center gap-2 flex-wrap">
+        {% for image in product.images %}
+          <div class="w-20 h-20 border rounded overflow-hidden">
+            <img 
+              src="{{ image | image_url }}" 
+              alt="{{ product.title }}" 
+              class="w-full h-full object-cover cursor-pointer" />
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="flex flex-col gap-4">
+      <h1 class="text-3xl font-bold">{{ product.title }}</h1>
+
+      <p class="text-xl text-gray-700 font-semibold">
+        {{ product.price | money }}
+      </p>
+
+      <div class="text-gray-600 text-sm leading-relaxed">
+        {{ product.description }}
+      </div>
+
+      <!-- Add to Cart Form -->
+      <form method="post" action="/cart/add" id="add-to-cart-form" onsubmit="return validateVariantSelection(event)">
+        <input type="hidden" name="id" id="variant-id" value="{{ product.variants.first.id }}">
+
+        <!-- Variant Options as Buttons -->
+        {% for option in product.options_with_values %}
+          <div class="mb-4">
+            <label class="font-semibold text-gray-800 block mb-2">{{ option.name }}:</label>
+
+            <div class="flex flex-wrap gap-2" id="option-group-{{ forloop.index0 }}">
+              {% for value in option.values %}
+                <button 
+                  type="button"
+                  class="variant-btn px-4 py-2 border border-gray-300 rounded hover:bg-black hover:text-white text-sm transition"
+                  data-option-index="{{ forloop.parentloop.index0 }}"
+                  data-option-value="{{ value }}"
+                  onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value }}', this)"
+                >
+                  {{ value }}
+                </button>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+
+        <!-- Hidden Inputs for Variant Selection -->
+        {% for option in product.options_with_values %}
+          <input type="hidden" name="option-{{ forloop.index0 }}" id="selected-option-{{ forloop.index0 }}">
+        {% endfor %}
+
+        <!-- Quantity Selector -->
+        <div class="flex items-center gap-2 mt-4">
+          <label for="quantity" class="text-sm font-medium text-gray-700">Quantity:</label>
+          <input 
+            type="number"
+            id="quantity"
+            name="quantity"
+            value="1"
+            min="1"
+            class="w-16 px-2 py-1 border border-gray-300 rounded"
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">
+          Add to Cart
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript Logic -->
+<script>
+  const variants = {{ product.variants | json }};
+
+  function selectOption(index, value, el) {
+    // Update hidden input
+    document.getElementById(`selected-option-${index}`).value = value;
+
+    // Button active styling
+    const group = document.getElementById(`option-group-${index}`);
+    [...group.children].forEach(btn => btn.classList.remove('bg-black', 'text-white'));
+    el.classList.add('bg-black', 'text-white');
+
+    updateVariant();
+  }
+
+  function updateVariant() {
+    const selectors = [
+      document.getElementById("selected-option-0")?.value,
+      document.getElementById("selected-option-1")?.value,
+      document.getElementById("selected-option-2")?.value
+    ].filter(val => val && val !== "");
+
+    const matchedVariant = variants.find(variant => {
+      return JSON.stringify(variant.options) === JSON.stringify(selectors);
+    });
+
+    if (matchedVariant) {
+      document.getElementById("variant-id").value = matchedVariant.id;
+    } else {
+      document.getElementById("variant-id").value = "";
+    }
+  }
+
+  function validateVariantSelection(event) {
+    const variantId = document.getElementById("variant-id").value;
+
+    if (!variantId) {
+      event.preventDefault();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Please select all the required variant options!',
+      });
+      return false;
+    } else {
+      Swal.fire({
+        icon: 'success',
+        title: 'Added to Cart!',
+        text: 'Your variant has been added to the cart.',
+        timer: 1500,
+        showConfirmButton: false
+      });
+      return true;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", updateVariant);
+</script>
+
+
