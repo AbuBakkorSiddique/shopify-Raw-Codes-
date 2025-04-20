@@ -1,0 +1,7 @@
+{% assign all_products = collections.all.products %}
+  {% for product in all_products %}
+    <div class="border p-4 rounded shadow text-center">
+      <p class="font-semibold">{{ product.title }}</p>
+      <img src="{{ product.featured_image | image_url }}" alt="{{ product.tilte  }}"/>
+    </div>
+  {% endfor %}
