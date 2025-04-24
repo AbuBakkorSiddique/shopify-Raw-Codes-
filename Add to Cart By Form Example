@@ -1,0 +1,33 @@
+  <form method="post" action="/cart/add">
+      <!-- Variant Selector (Color) -->
+      {% if product.variants.size > 1 %}
+        <label for="variant-select" class="block font-semibold mb-1">Select Color:</label>
+        <select id="variant-select" name="id" class="w-full border rounded px-3 py-2 mb-4">
+          {% for variant in product.variants %}
+            <option value="{{ variant.id }}">{{ variant.title }}</option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <!-- If only 1 variant, just pass hidden variant ID -->
+        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+      {% endif %}
+
+      <!-- Quantity Input -->
+      <label for="quantity" class="block font-semibold mb-1">Quantity:</label>
+      <input 
+        id="quantity"
+        type="number" 
+        name="quantity" 
+        value="1" 
+        min="1" 
+        class="w-24 border rounded px-3 py-2 mb-4" 
+      />
+
+      <!-- Add to Cart Button -->
+      <button 
+        type="submit" 
+        class="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition"
+      >
+        Add to Cart
+      </button>
+    </form>
