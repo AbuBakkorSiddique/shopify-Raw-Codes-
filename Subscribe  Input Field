@@ -1,9 +1,13 @@
-<form method="post" action="/contact#contact_form">
+
+<div class="h-[20vh] w-full flex flex-row justify-center items-center bg-slate-100 ">
+
+<form method="post" action="/contact#contact_form" class=" bg-slate-300  w-[60%] grid grid-cols-3  justify-center items-center ">
   <input type="hidden" name="form_type" value="customer">
   <input type="hidden" name="utf8" value="✓">
-  <input type="email" name="contact[email]" required />
-  <button type="submit">Subscribe</button>
+  <input type="email" name="contact[email]" required class="bg-white p-5  col-span-2 outline-none focus:outline-none" placeholder="example@gmail.com">
+  <button type="submit" class=" p-5">Subscribe</button>
 </form>
+</div>
 
 
 
