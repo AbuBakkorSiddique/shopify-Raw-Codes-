@@ -1,0 +1,37 @@
+<form method="post" action="/contact#contact_form">
+  <input type="hidden" name="form_type" value="customer">
+  <input type="hidden" name="utf8" value="✓">
+  <input type="email" name="contact[email]" required />
+  <button type="submit">Subscribe</button>
+</form>
+
+
+
+********    Important  Things  ****************
+
+
+✅ Shopify Contact/Newsletter Form er jonno Required Elements (Point-akare):
+<form> tag er modhe action="/contact#contact_form" thakte hobe
+
+Eta Shopify-er built-in route jekhane form data pathay.
+
+method="post" use korte hobe
+
+Shopify form gulo POST method e kaj kore.
+
+<input type="hidden" name="form_type" value="customer"> dite hobe
+
+Eta bolay Shopify ke je eta ekta customer subscription form.
+
+<input type="hidden" name="utf8" value="✓"> thakle bhalo
+
+Shopify compatibility jonno use hoy.
+
+Email input field er name="contact[email]" hote hobe
+
+Shopify email ke identify korte pare.
+
+Email field e required attribute thakle validation hoy
+
+Form submit korle page reload hobe (JavaScript diye prevent korle backend e jabena)
+
