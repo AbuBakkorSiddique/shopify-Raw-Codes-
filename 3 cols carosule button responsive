@@ -1,0 +1,88 @@
+<div class="w-full flex justify-center items-center">
+  <!-- Small Devices: Slider -->
+  <div class="block md:hidden relative w-full h-[60vh] overflow-hidden">
+    <div id="mobile-slider" class="w-full h-full relative">
+      {% for collection in section.settings.select_collections %}
+        <div class="mobile-slide w-full h-full absolute top-0 left-0 transition-all duration-500 opacity-0">
+          <img src="{{ collection.featured_image | image_url }}" alt="{{ collection.title }}" class="w-full h-full object-cover" />
+          <div class="absolute top-0 left-0 w-full h-full bg-black/40 flex flex-col justify-center items-center text-white gap-2">
+            <h1 class="text-lg">{{ collection.title }}</h1>
+            <a href="{{ collection.url }}">
+              <button class="border border-white px-4 py-2 hover:bg-white hover:text-black">Shop Now</button>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Navigation Buttons -->
+    <button id="prevBtn" class="absolute left-2 top-1/2 -translate-y-1/2 text-white text-3xl z-10">&lt;</button>
+    <button id="nextBtn" class="absolute right-2 top-1/2 -translate-y-1/2 text-white text-3xl z-10">&gt;</button>
+  </div>
+
+  <!-- Desktop Grid -->
+  <div class="hidden md:grid h-[80%] w-[90%] grid-cols-3 gap-5">
+    {% for collection in section.settings.select_collections %}
+      <div class="h-full w-full relative">
+        <img src="{{ collection.featured_image | image_url }}" alt="{{ collection.title }}" class="h-full w-full object-cover" />
+        <div class="h-full w-full flex flex-col absolute top-0 left-0 justify-center items-center text-center gap-2 bg-black/40 text-white">
+          <h1 class="text-md">{{ collection.title }}</h1>
+          <a href="{{ collection.url }}">
+            <button class="text-md pt-2 pb-2 pl-5 pr-5 hover:text-white hover:border-black border border-white hover:bg-black">Shop Now</button>
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+<!-- Slider Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.mobile-slide');
+    let index = 0;
+
+    function showSlide(i) {
+      slides.forEach((slide, idx) => {
+        slide.style.opacity = idx === i ? '1' : '0';
+        slide.style.zIndex = idx === i ? '10' : '0';
+      });
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      index = (index - 1 + slides.length) % slides.length;
+      showSlide(index);
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      index = (index + 1) % slides.length;
+      showSlide(index);
+    });
+
+    showSlide(index);
+  });
+</script>
+
+
+
+{% schema %}
+{
+  "name": "Show Collection",
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "select_collections",
+      "label": "Choose the Collections",
+      "limit": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Show Collection"
+    }
+  ]
+}
+{% endschema %}
