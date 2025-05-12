@@ -1,33 +1,52 @@
-  <form method="post" action="/cart/add">
-      <!-- Variant Selector (Color) -->
-      {% if product.variants.size > 1 %}
-        <label for="variant-select" class="block font-semibold mb-1">Select Color:</label>
-        <select id="variant-select" name="id" class="w-full border rounded px-3 py-2 mb-4">
-          {% for variant in product.variants %}
-            <option value="{{ variant.id }}">{{ variant.title }}</option>
-          {% endfor %}
-        </select>
-      {% else %}
-        <!-- If only 1 variant, just pass hidden variant ID -->
-        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-      {% endif %}
+      <form method="post" action="/cart/add" id="add-to-cart-form" onsubmit="return validateVariantSelection(event)">
+        <input type="hidden" name="id" id="variant-id" value="{{ product.variants.first.id }}">
 
-      <!-- Quantity Input -->
-      <label for="quantity" class="block font-semibold mb-1">Quantity:</label>
-      <input 
-        id="quantity"
-        type="number" 
-        name="quantity" 
-        value="1" 
-        min="1" 
-        class="w-24 border rounded px-3 py-2 mb-4" 
-      />
+        <!-- Variant Options as Buttons -->
+  {% unless product.has_only_default_variant %}
+           {% for option in product.options_with_values %}
+          <div class="mb-4">
+            <label class="font-semibold text-gray-800 block mb-2">{{ option.name }}:</label>
 
-      <!-- Add to Cart Button -->
-      <button 
-        type="submit" 
-        class="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition"
-      >
-        Add to Cart
-      </button>
-    </form>
+            <div class="flex flex-wrap gap-2" id="option-group-{{ forloop.index0 }}">
+              {% for value in option.values %}
+                <button 
+                  type="button"
+                  class="variant-btn px-4 py-2 border border-gray-300 rounded hover:bg-black hover:text-white text-sm transition"
+                  data-option-index="{{ forloop.parentloop.index0 }}"
+                  data-option-value="{{ value }}"
+                  onclick="selectOption({{ forloop.parentloop.index0 }}, '{{ value }}', this)"
+                >
+                  {{ value }}
+                </button>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+    
+  {% endunless %}
+
+        <!-- Hidden Inputs for Variant Selection -->
+        {% for option in product.options_with_values %}
+          <input type="hidden" name="option-{{ forloop.index0 }}" id="selected-option-{{ forloop.index0 }}">
+        {% endfor %}
+
+        <!-- Quantity Selector -->
+        <div class="flex items-center gap-2 mt-4">
+          <label for="quantity" class="text-sm font-medium text-gray-700">Quantity:</label>
+          <input 
+            type="number"
+            id="quantity"
+            name="quantity"
+            value="1"
+            min="1"
+            class="w-16 px-2 py-1 border border-gray-300 rounded"
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="mt-4 bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">
+          Add to Cart
+        </button>
+      </form>
