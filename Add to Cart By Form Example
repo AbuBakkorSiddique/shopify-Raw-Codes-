@@ -1,4 +1,9 @@
-      <form method="post" action="/cart/add" id="add-to-cart-form" onsubmit="return validateVariantSelection(event)">
+===============  eta sweet alart er js eta uporei add kore nite hobe ============================
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
+
+
+================ form code ta jeta  product details er vitor a add kore nite hobe =================================
+  <form method="post" action="/cart/add" id="add-to-cart-form" onsubmit="return validateVariantSelection(event)">
         <input type="hidden" name="id" id="variant-id" value="{{ product.variants.first.id }}">
 
         <!-- Variant Options as Buttons -->
@@ -50,3 +55,67 @@
           Add to Cart
         </button>
       </form>
+
+
+
+
+
+<!-- JavaScript Logic -->
+<script>
+  const variants = {{ product.variants | json }};
+
+  function selectOption(index, value, el) {
+    // Update hidden input
+    document.getElementById(`selected-option-${index}`).value = value;
+
+    // Button active styling
+    const group = document.getElementById(`option-group-${index}`);
+    [...group.children].forEach(btn => btn.classList.remove('bg-black', 'text-white'));
+    el.classList.add('bg-black', 'text-white');
+
+    updateVariant();
+  }
+
+  function updateVariant() {
+    const selectors = [
+      document.getElementById("selected-option-0")?.value,
+      document.getElementById("selected-option-1")?.value,
+      document.getElementById("selected-option-2")?.value
+    ].filter(val => val && val !== "");
+
+    const matchedVariant = variants.find(variant => {
+      return JSON.stringify(variant.options) === JSON.stringify(selectors);
+    });
+
+    if (matchedVariant) {
+      document.getElementById("variant-id").value = matchedVariant.id;
+    } else {
+      document.getElementById("variant-id").value = "";
+    }
+  }
+
+  function validateVariantSelection(event) {
+    const variantId = document.getElementById("variant-id").value;
+
+    if (!variantId) {
+      event.preventDefault();
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Please select all the required variant options!',
+      });
+      return false;
+    } else {
+      Swal.fire({
+        icon: 'success',
+        title: 'Added to Cart!',
+        text: 'Your variant has been added to the cart.',
+        timer: 1500,
+        showConfirmButton: false
+      });
+      return true;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", updateVariant);
+</script>
