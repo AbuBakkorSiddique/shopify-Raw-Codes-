@@ -1,0 +1,76 @@
+<div class="h-20 w-full flex justify-center items-center bg-slate-500">
+<h1 class="text-white text-xl font-bold "> Your  Cart List </h1>  
+</div>
+<div class="min-h-[100vh] w-full grid grid-cols-1 md:grid-cols-3">
+{%  if cart.item_count > 0 %}
+  <div class="col-span-2 " >
+{%  for item in cart.items %}
+    <div class=" w-full grid grid-cols-6 justify-center items-center  pb-6 ">
+      <div class="image h-[100px] w-[100px] overflow-hidden">
+        <img src="{{ item.image | image_url }}" alt="" class=" object-fit  " />
+      </div>
+  <div class="flex flex-col">
+  <h1 class="text-xl font-bold">{{ item.product.title }}</h1>
+
+  <div class="mt-1 space-y-1">
+    {% for option in item.options_with_values %}
+      <p class="text-sm text-gray-700">
+        <span class="font-medium">{{ option.name }}</span>: <span>{{ option.value }}</span>
+      </p>
+    {% endfor %}
+  </div>
+</div>
+
+        <div>
+          {{ item.price }}
+      </div>
+        <div>
+          {{ item.quantity }}
+      </div>
+        <div>
+          {{ item.final_line_price }}
+      </div>
+      <div class="flex flex-row gap-5">
+        <a href="{{ item.url }}">
+          <button class="border p-2 bg-green-600 text-white rounded-md "> Edit </button>
+        </a>
+
+        <form  action="/cart/change" method="post">
+          <input type="hidden" name="id" value="{{ item.key }}"/>
+          <input type="hidden" name="quantity" value="0" />
+               <button type="submit" class="border  p-2 bg-red-600 text-white rounded-md " > Delete </button>
+          
+        </form>
+        
+       
+        
+
+      </div>
+        
+    </div>
+
+    {% endfor %}
+    
+  </div>
+
+  <div class="flex flex-col jusity-center items-center w-full ">
+<div class="w-full h-1/2 flex flex-col justify-start p-5 rounded-md items-center  bg-slate-300 mt-5 ">
+
+      <div class="flex flex-row  gap-3">
+   TOtal Price :    {{ cart.total_price }}
+    </div>
+  <div class="flex flex-row gap-3 ">
+   TOtal Items Count :  {{ cart.item_count }}
+  </div>
+  <div>
+    <a href="/checkout" >
+      <button class="btn border rounded-md bg-black text-white pt-2 pb-2 pl-3 pr-3"> Checkout </button>
+    </a>
+  </div>
+
+</div>
+    
+    
+  </div>
+  {% endif %}
+</div>
