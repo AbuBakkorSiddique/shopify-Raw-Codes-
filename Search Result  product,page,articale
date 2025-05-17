@@ -1,0 +1,15 @@
+{% for item in search.results %}
+  <div class="search-item">
+    <a href="{{ item.url }}">
+      {% if item.object_type == 'product' %}
+        <img src="{{ item.featured_image | img_url: 'medium' }}" alt="{{ item.title }}">
+        <p>{{ item.title }}</p>
+      {% elsif item.object_type == 'article' %}
+        <img src="{{ item.image | img_url: 'medium' }}" alt="{{ item.title }}">
+        <p>{{ item.title }}</p>
+      {% else %}
+        <p>{{ item.title }}</p>
+      {% endif %}
+    </a>
+  </div>
+{% endfor %}
