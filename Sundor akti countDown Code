@@ -1,0 +1,66 @@
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Countdown Timer -->
+<div class="flex justify-center items-end gap-4 border-2 border-red-500 w-fit mx-auto p-4">
+  <div class="text-center">
+    <div class="text-sm text-gray-600">Days</div>
+    <div id="days" class="text-2xl font-bold text-black">00</div>
+  </div>
+  <div class="text-2xl font-bold text-black">:</div>
+  <div class="text-center">
+    <div class="text-sm text-gray-600">Hours</div>
+    <div id="hours" class="text-2xl font-bold text-black">00</div>
+  </div>
+  <div class="text-2xl font-bold text-black">:</div>
+  <div class="text-center">
+    <div class="text-sm text-gray-600">Minutes</div>
+    <div id="minutes" class="text-2xl font-bold text-black">00</div>
+  </div>
+  <div class="text-2xl font-bold text-black">:</div>
+  <div class="text-center">
+    <div class="text-sm text-gray-600">Seconds</div>
+    <div id="seconds" class="text-2xl font-bold text-black">00</div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+===================js code =========================
+
+<script>
+  // Set target date (you can change it as needed)
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + 3); // 3 days later
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      document.getElementById("days").textContent = "00";
+      document.getElementById("hours").textContent = "00";
+      document.getElementById("minutes").textContent = "00";
+      document.getElementById("seconds").textContent = "00";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("days").textContent = String(days).padStart(2, "0");
+    document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+    document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+    document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>
